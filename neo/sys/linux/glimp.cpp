@@ -634,10 +634,11 @@ int Sys_GetVideoRam( void ) {
 	// try ATI /proc read ( for the lack of a better option )
 	int fd;
 	if ( ( fd = open( "/proc/dri/0/umm", O_RDONLY ) ) != -1 ) {
-		int len;
 		char umm_buf[ 1024 ];
 		char *line;
-		if ( ( len = read( fd, umm_buf, 1024 ) ) != -1 ) {
+		int len = read( fd, umm_buf, 1024 );
+		close( fd );
+		if ( len != -1 ) {
 			// should be way enough to get the full file
 			// grab "free  LFB = " line and "free  Inv = " lines
 			umm_buf[ len-1 ] = '\0';
